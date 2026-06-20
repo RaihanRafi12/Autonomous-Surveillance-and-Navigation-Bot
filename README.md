@@ -25,11 +25,13 @@
 
 <table>
 <tr>
-<td width="50%"><img src="readme_assets/Front_View.jpeg" alt="Front sensor deck"/></td>
-<td width="50%"><img src="readme_assets/rover_back.jpg" alt="Rear compute deck"/></td>
+<td width="33.33%"><img src="readme_assets/Front_View.jpeg" alt="Front sensor deck"/></td>
+<td width="33.33%"><img src="readme_assets/Top_View.jpg" alt="Top controller deck"/></td>
+<td width="33.33%"><img src="readme_assets/Rear_View.jpg" alt="Rear compute deck"/></td>
 </tr>
 <tr>
 <td align="center"><sub><b>Sensor deck</b> — ultrasonic array, IR modules, wiring harness</sub></td>
+<td align="center"><sub><b>Controller deck</b> — ESP32, Compass Module, GPS Module, OLED Module, Thermal Sensor, Gas Sensor, wiring harness</sub></td>
 <td align="center"><sub><b>Compute deck</b> — Raspberry Pi 4, Logitech webcam, power distribution</sub></td>
 </tr>
 </table>
@@ -290,12 +292,13 @@ Field-tested in a **2,500 sq. ft.** facility:
 | Name | Student ID | Email |
 |------|------------|-------|
 | MD. Shafatul Haque Mahim | 0112320084 | mmahim2320084@bscse.uiu.ac.bd |
-| Raihan Raf | 0112320164 | rrafi2320164@bscse.uiu.ac.bd |
+| Raihan Rafi | 0112320164 | rrafi2320164@bscse.uiu.ac.bd |
 | Farin Ferdous | 0112320238 | fferdous2320238@bscse.uiu.ac.bd |
 | Abdullah Al Mamun | 0112320163 | amamun2320163@bscse.uiu.ac.bd |
 | Abid Afzal Galib | 0112320086 | agalib2320086@bscse.uiu.ac.bd |
 
 **Course Instructor:** Mr. Fahim Hafiz
+**Email:** fahimhafiz@cse.uiu.ac.bd
 
 ---
 
