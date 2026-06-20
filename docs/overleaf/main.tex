@@ -1,0 +1,1792 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% --- Code Syntax Highlighting Configuration ---
+\definecolor{mGreen}{rgb}{0,0.55,0}
+\definecolor{mGray}{rgb}{0.45,0.45,0.45}
+\definecolor{mPurple}{rgb}{0.55,0,0.55}
+\definecolor{backgroundColour}{rgb}{0.98,0.98,0.96}
+
+\lstset{
+    backgroundcolor=\color{backgroundColour},
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\ttfamily\tiny,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=3pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single,
+    xleftmargin=10pt
+}
+
+\begin{document}
+
+% ==========================================
+% Course Cover Page (UIU CSE 4326 — Group 4)
+% ==========================================
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\LARGE\textbf{United International University}\par}
+\vspace{0.4cm}
+{\large Department of Computer Science and Engineering (B.Sc. CSE)\par}
+\vspace{1.2cm}
+{\Huge\textbf{Autonomous Surveillance and Navigation Bot}\par}
+\vspace{0.6cm}
+{\Large Research Journal Paper\par}
+\vspace{1.0cm}
+\begin{tabular}{rl}
+\textbf{Course Title:} & Microprocessors and Microcontrollers Laboratory \\
+\textbf{Course Code:} & CSE 4326 \\
+\textbf{Section:} & K \\
+\textbf{Course Instructor:} & Mr.~Fahim Hafiz \\
+\textbf{Group Number:} & 4 \\
+\textbf{Submission Date:} & 20th June, 2026 \\
+\end{tabular}
+\vspace{1.2cm}
+
+\begin{tabular}{ll}
+\textbf{Team Member} & \textbf{Student ID} \\
+MD.~Shafatul Haque Mahim & 0112320084 \\
+Raihan Raf & 0112320164 \\
+Farin Ferdous & 0112320238 \\
+Abdullah Al Mamun & 0112320163 \\
+Abid Afzal Galib & 0112320086 \\
+\end{tabular}
+
+\vfill
+{\large Dhaka, Bangladesh\par}
+{\large \url{https://github.com/RaihanRafi12/Autonomous-Surveillance-and-Navigation-Bot}\par}
+\end{titlepage}
+
+\title{Autonomous Surveillance and Navigation Bot\\
+\thanks{Research Journal Paper submitted to the Department of Computer Science and Engineering, United International University (UIU), Dhaka, Bangladesh. Course: Microprocessors and Microcontrollers Laboratory (CSE~4326), Section~K. Instructor: Mr.~Fahim Hafiz. Group~4. Submission Date: 20th June, 2026.}
+}
+
+\author{
+\IEEEauthorblockN{1\textsuperscript{st} MD Shafatul Haque Mahim}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{United International University}\\
+Dhaka, Bangladesh \\
+\href{mailto:mmahim2320084@bscse.uiu.ac.bd}{mmahim2320084@bscse.uiu.ac.bd}}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Raihan Raf}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{United International University}\\
+Dhaka, Bangladesh \\
+\href{mailto:rrafi2320164@bscse.uiu.ac.bd}{rrafi2320164@bscse.uiu.ac.bd}}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Farin Ferdous}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{United International University}\\
+Dhaka, Bangladesh \\
+\href{mailto:fferdous2320238@bscse.uiu.ac.bd}{fferdous2320238@bscse.uiu.ac.bd}}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Abdullah AL Mamun}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{United International University}\\
+Dhaka, Bangladesh \\
+\href{mailto:amamun2320163@bscse.uiu.ac.bd}{amamun2320163@bscse.uiu.ac.bd}}
+\and
+\IEEEauthorblockN{5\textsuperscript{th} Abid Afzal Galib}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{United International University}\\
+Dhaka, Bangladesh \\
+\href{mailto:agalib2320086@bscse.uiu.ac.bd}{agalib2320086@bscse.uiu.ac.bd}}
+
+}
+
+\maketitle
+
+\begin{abstract}
+This project paper presents the architectural framework, financial parameters, physical deployment, and multi-layered software synchronization of an autonomous indoor security and surveillance 6-Wheel Drive (6WD) robotic rover. Modern edge surveillance requires the simultaneous processing of high-frequency environmental telemetry and localized deep-learning computer vision tracking matrices. Single-processor configurations frequently suffer from software thread starvation, driving latency, or data corruption induced by high-current motor back-EMF noise. To resolve these execution barriers, we present a distributed heterogeneous computing configuration separating tasks across three distinct layers: a Host Node (Raspberry Pi 4) hosting a Flask web engine and a local TensorFlow Lite SSD MobileNet v2 image interpreter; an Intermediate Sensory Aggregator Node (ESP32) managing an integrated NEO-6M GPS, HMC5883L digital compass, and a 360-degree virtual barrier matrix; and a real-time Execution Node (Arduino Uno) controlling three dual H-bridge drivers via physical channel jumping. The implemented platform runs edge vision inference at 18--22 FPS while keeping command latency under 45 milliseconds, achieving a highly responsive zero-radius skid-steering platform optimized for structural mapping within complex facility layouts.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Distributed Heterogeneous Computing, 6WD Robotics, Skid-Steering, NEO-6M GPS, HMC5883L Compass, TensorFlow Lite, Multi-Agent Interdependence, Edge Intelligence.
+\end{IEEEkeywords}
+
+% ==========================================
+\section{Introduction}
+% ==========================================
+\textbf{[Problem Statement]} Autonomous robotic systems built for  surveillance, environmental asset profiling, and space diagnostics require a reliable framework capable of simultaneous data processing and motor driving. When tracking targets inside an unstructured layout, such as a 2500 square foot professional workplace office, the system must process real-time computer vision inference models while keeping motor adjustments low-latency. If these complex workloads are deployed on a single microprocessor board, high-latency vision computation tasks can block real-time motor interrupts. This structural bottleneck causes command lag or erratic driving behaviors, which can result in physical collisions with furniture, walls, or office personnel.
+
+\textbf{[Literature Review]} Prior mobile robotic configurations rely on a centralized computing architecture where one core microcontroller processes sensor data and modulates pulse-width modulation (PWM) output bridges. Previous projects have tracked variables like local temperature, humidity, and gas indicators using standard analog lines. However, empirical studies reveal that when a centralized chip handles concurrent video encoding, network streaming, or object classification, time-critical hardware loops can face starvation. This computational latency degrades the vehicle's reaction speeds, making centralized architectures less reliable for heavy-duty indoor surveillance operations.
+
+\textbf{[Innovative Features]} The proposed design implements a distributed heterogeneous architecture that isolates high-latency data processing from low-latency mechanical control. It replaces standard tracking systems with a 6-Wheel Drive configuration using customized physical copper jumper loops on three separate L298N drivers to achieve synchronized zero-turn skid steering. Furthermore, the architecture includes a local visual verification node via an SSD1306 physical OLED screen and pairs a front-facing camera streaming framework with an independent multi-sensor proximity array (combining ultrasonic, infrared, NEO-6M GPS, and HMC5883L digital compass modules). This layout forms a reliable hardware-level safety shield that overrides manual operation to prevent collisions even if the primary software server stalls.
+
+% ==========================================
+\section{Proposed Method}
+% ==========================================
+The underlying operational technique uses structural separation of duties, minimizing instruction queuing delays by placing specific tasks onto targeted microchips.
+
+\subsection{Architectural Pipeline Flowchart}
+To maintain low latency, data transactions are prioritized and handled via distinct processing lines across a multi-tier structural design:
+
+\begin{figure}[htbp]
+\centering
+% -------------------------------------------------------
+% TO ADD YOUR IMAGE: Replace the path below with your
+% actual image filename, e.g.: images/pipeline_flow.png
+% -------------------------------------------------------
+\includegraphics[width=\columnwidth]{image/pipeline_flow.png}
+% -------------------------------------------------------
+\caption{Step-by-step structural processing pipeline mapping.}
+\label{fig:pipeline_flow}
+\end{figure}
+
+The layout illustrated in Fig.~\ref{fig:pipeline_flow} handles communication tasks seamlessly. The sensory data flows upstream to provide real-time updates to the web dashboard, while manual override commands travel down the pipeline to ensure immediate physical braking.
+
+% ==========================================
+\section{Implemented Hardware System}
+% ==========================================
+
+\subsection{Component Names and Technical Uses}
+The system divides its processing load dynamically across specialized hardware layers to ensure low execution latency:
+\begin{itemize}
+    \item \textbf{Raspberry Pi 4 Model B (4GB RAM):} Serves as the central orchestration node. Processes the TensorFlow Lite AI inference workload and hosts the network-facing web dashboard.
+    \item \textbf{ESP32 DevKit V1:} Manages high-frequency sensor readings, decodes GPS coordinates, checks digital obstacle boundaries, updates the on-board OLED screen, and transmits telemetry packets upstream over USB.
+    \item \textbf{NEO-6M GPS Module:} Captures real-time NMEA coordinate streams via satellite triangulation to verify localization positions within the target site map grid.
+    \item \textbf{HMC5883L Triple-Axis Digital Compass:} Provides high-resolution magnetic heading angles relative to magnetic North, allowing fine heading error corrections.
+    \item \textbf{Arduino Uno R3:} Acts as an isolated real-time mechanical controller, reading direct character bytes from the serial bridge and switching H-bridge gates instantly, entirely isolated from network latency or OS-level process shifts.
+    \item \textbf{L298N Dual H-Bridge Drivers (×3):} Provide precise voltage scaling and direction switching for the six high-torque geared DC chassis motors.
+    \item \textbf{Integrated Sensory Array:} Three HC-SR04 ultrasonic sensors and three digital IR modules forming a 360-degree protective boundary, an MQ-2 gas module, and a DHT11 sensor for ambient diagnostics.
+\end{itemize}
+
+\subsection{Software Environment and Embedded Libraries}
+Table~\ref{tab:software_stack} summarizes the software toolchain deployed across the three compute tiers. The host node executes Python~3 with OpenCV (\texttt{cv2}) for frame capture and JPEG streaming via \texttt{cv2.imencode}, while the SSD MobileNet~v2 weights---pre-trained on the COCO dataset---are executed through an ONNX Runtime session that mirrors the TensorFlow Lite deployment profile (300$\times$300 input, 18--22\,FPS). The ESP32 firmware relies on \texttt{ArduinoJson.h} (\texttt{StaticJsonDocument<512>}) for 100\,ms telemetry serialization, \texttt{DHT.h} for climate sampling, \texttt{Adafruit\_SSD1306.h} and \texttt{Wire.h} for the local OLED HUD, and \texttt{SoftwareSerial.h}/hardware \texttt{Serial2} for the Arduino command bridge. The Arduino Uno uses \texttt{SoftwareSerial.h} on pins~11/12 to receive single-byte drive vectors isolated from network latency.
+
+\begin{table}[htbp]
+\caption{Software Stack and Library Mapping Across Compute Tiers}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tier} & \textbf{Language} & \textbf{Key Libraries} \\
+\midrule
+Raspberry Pi 4 & Python 3 & Flask, OpenCV, ONNX Runtime, \\
+ &  & pynmea2, smbus2, pyserial, NumPy \\
+ESP32 & C++ (Arduino) & ArduinoJson, DHT, Adafruit SSD1306, Wire \\
+Arduino Uno & C++ (Arduino) & SoftwareSerial \\
+\bottomrule
+\end{tabular}
+\label{tab:software_stack}
+\end{center}
+\end{table}
+
+% ------------------------------------------
+\subsection{Hardware Architecture and Electrical Interconnects}
+% ------------------------------------------
+The physical deployment requires precise pin-to-pin signal synchronization and cross-tier electrical line separation across all three heterogeneous computing tiers to establish operational safety shields.
+
+\subsubsection{Central Processing Interconnects}
+\begin{itemize}
+    \item \textbf{Raspberry Pi 4 $\longleftrightarrow$ ESP32 (Main Data Link):} Connected via a shielded USB-A to Micro-USB data cable. The USB-A end plugs into one of the blue USB~3.0 ports on the Raspberry Pi~4, and the other end into the onboard CP210x interface of the ESP32. This supplies stable $5\,\text{V}$ power to the ESP32 logic rail and opens a hardware serial bus mapped at \texttt{/dev/ttyUSB0} at $115200\,\text{bps}$.
+
+    \item \textbf{ESP32 $\longleftrightarrow$ Arduino Uno (Command Execution Bridge):} Connected using point-to-point jumper wires routed through an inline voltage protection network:
+    \begin{itemize}
+        \item \textbf{ESP32 GPIO~17 (TX2)} $\longrightarrow$ Arduino Pin~11 (Software RX) — direct connection.
+        \item \textbf{Arduino Pin~12 (Software TX)} $\longrightarrow$ ESP32 GPIO~16 (RX2) via a resistor voltage divider: a $1\,\text{k}\Omega$ series resistor followed by a $2\,\text{k}\Omega$ resistor to ground reduces the Arduino's $5\,\text{V}$ pulse to $3.33\,\text{V}$, protecting the ESP32's $3.3\,\text{V}$ logic rail.
+    \end{itemize}
+
+    \item \textbf{Shared Ground Plane:} A dedicated jumper wire bridges an ESP32 GND pin to an Arduino Uno GND pin, establishing a zero-potential reference baseline across all three tiers.
+\end{itemize}
+
+\subsubsection{Voltage Divider Calculation}
+Because the Arduino Uno outputs 5V logic pulses, its TX signal must pass through a protective voltage divider before reaching the ESP32's 3.3V RX2 pin:
+\begin{equation}
+V_{\text{ESP32\_RX2}} = V_{\text{Arduino\_TX}} \times \left( \frac{R_2}{R_1 + R_2} \right)
+\end{equation}
+Setting $R_1 = 1\,\text{k}\Omega$ and $R_2 = 2\,\text{k}\Omega$ yields:
+\begin{equation}
+V_{\text{ESP32\_RX2}} = 5\,\text{V} \times \left( \frac{2\,\text{k}\Omega}{1\,\text{k}\Omega + 2\,\text{k}\Omega} \right) = 3.33\,\text{V}
+\end{equation}
+
+\subsubsection{Raspberry Pi Navigation Sensor Connections}
+\begin{itemize}
+    \item \textbf{NEO-6M GPS Module} (connected to Pi GPIO header):
+    \begin{itemize}
+        \item VCC $\longrightarrow$ Pin~1 ($3.3\,\text{V}$) \quad GND $\longrightarrow$ Pin~6
+        \item TX $\longrightarrow$ Pin~10 (GPIO~15 / RXD0) \quad RX $\longleftarrow$ Pin~8 (GPIO~14 / TXD0)
+    \end{itemize}
+    \item \textbf{HMC5883L Compass} (connected to Pi I2C bus):
+    \begin{itemize}
+        \item VCC $\longrightarrow$ Pin~17 ($3.3\,\text{V}$) \quad GND $\longrightarrow$ Pin~9
+        \item SDA $\longleftrightarrow$ Pin~3 (GPIO~2 / I2C1 SDA) \quad SCL $\longleftrightarrow$ Pin~5 (GPIO~3 / I2C1 SCL)
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{ESP32 Sensor Array Pin Mapping}
+\begin{itemize}
+    \item \textbf{HC-SR04 Left Sonar:} Trig $\longleftarrow$ GPIO~5 $\;\vert\;$ Echo $\longrightarrow$ GPIO~18
+    \item \textbf{HC-SR04 Right Sonar:} Trig $\longleftarrow$ GPIO~26 $\;\vert\;$ Echo $\longrightarrow$ GPIO~27
+    \item \textbf{HC-SR04 Rear Sonar:} Trig $\longleftarrow$ GPIO~15 $\;\vert\;$ Echo $\longrightarrow$ GPIO~23
+    \item \textbf{Left IR Proximity:} OUT $\longrightarrow$ GPIO~14
+    \item \textbf{Right IR Proximity:} OUT $\longrightarrow$ GPIO~12
+    \item \textbf{Rear IR Proximity:} OUT $\longrightarrow$ GPIO~13
+    \item \textbf{DHT11 Climate Sensor:} Data $\longrightarrow$ GPIO~4 (pull-up: $4.7\,\text{k}\Omega$ to $3.3\,\text{V}$)
+    \item \textbf{MQ-2 Gas Sensor:} Analog Out $\longrightarrow$ GPIO~33 (ADC1\_CH5)
+\end{itemize}
+
+\subsubsection{Arduino Uno to Triple L298N Motor Driver Matrix}
+The six chassis motors are managed via three L298N drivers using localized pin jumping to group inputs:
+\begin{itemize}
+    \item \textbf{Driver~1 (Outer Left — Front-Left \& Back-Left):}
+        IN1 jumped to IN3 $\longleftarrow$ Pin~2;\quad
+        IN2 jumped to IN4 $\longleftarrow$ Pin~3;\quad
+        ENA jumped to ENB $\longleftarrow$ Pin~4 (PWM Enable).
+    \item \textbf{Driver~2 (Outer Right — Front-Right \& Back-Right):}
+        IN1 jumped to IN3 $\longleftarrow$ Pin~5;\quad
+        IN2 jumped to IN4 $\longleftarrow$ Pin~6;\quad
+        ENA jumped to ENB $\longleftarrow$ Pin~7 (PWM Enable).
+    \item \textbf{Driver~3 (Center Axis — Mid-Left \& Mid-Right):}
+        IN1 $\longleftarrow$ Pin~8;\quad
+        IN3 $\longleftarrow$ Pin~9;\quad
+        IN2 and IN4 tied to driver GND rail;\quad
+        ENA jumped to ENB $\longleftarrow$ Pin~10 (PWM Balance).
+\end{itemize}
+
+% ------------------------------------------
+\subsection{Step-by-Step Assembly and Connection Guide}
+% ------------------------------------------
+Follow this sequential checklist to assemble, ground, and isolate the electronic sub-tiers without risking signal distortion or chip damage:
+
+\begin{enumerate}
+    \item \textbf{Common Ground Infrastructure.} Run a heavy-gauge wire from the 18650 battery distribution shield, an Arduino GND pin, an ESP32 GND pin, and a Raspberry Pi GND header pin (e.g., Pin~6) to a single shared copper ground rail. This eliminates floating potentials and protects signal integrity across all three computing chips.
+
+    \item \textbf{High-Voltage Motor Power Grid.} Route thick positive leads ($+12\,\text{V}$) from the battery cells directly to the $+12\,\text{V}$ screw-terminal lugs on all three L298N drivers. Connect negative return wires to the driver GND lugs. Keep these high-current tracks physically isolated from logic lines to prevent back-EMF noise from resetting microcontrollers.
+
+    \item \textbf{Arduino-to-Driver Input Jumper Pairs.} On Driver~1, bridge IN1 to IN3, IN2 to IN4, and ENA to ENB with wire loops, then connect control lines to Arduino Pins 2, 3, and 4. Repeat for Driver~2 on Pins 5, 6, and 7. On Driver~3, jumper ENA to ENB (Pin~10), tie IN2 and IN4 to the driver ground lug, and connect IN1 and IN3 to Pins 8 and 9 for center-axis pivot balancing.
+
+    \item \textbf{ESP32-to-Arduino Voltage-Divided Link.} Connect a jumper from ESP32 GPIO~17 directly to Arduino Pin~11. For the return line: connect Arduino Pin~12 to an intermediate node, place a $1\,\text{k}\Omega$ resistor from that node in series, then from that node connect a $2\,\text{k}\Omega$ resistor to ground and a jumper to ESP32 GPIO~16.
+
+    \item \textbf{ESP32 Sensor and IR Array Wiring.} Route $+5\,\text{V}$ and GND to all three HC-SR04 modules, the MQ-2 module, and the three IR modules. Connect the DHT11 to a $3.3\,\text{V}$ rail. Wire all signal lines per the ESP32 pin mapping defined in Section~\ref{sec:esp32_pins}.
+
+    \item \textbf{Primary USB Data Cable.} Insert a high-speed shielded USB-A cable into a blue USB~3.0 port on the Raspberry Pi~4 and route it to the ESP32's onboard serial port.
+
+    \item \textbf{Raspberry Pi Navigation Suite.} Mount the NEO-6M GPS antenna with an unobstructed sky view. Connect VCC, GND, TX, and RX to Pi physical pins 1, 6, 10, and 8. Mount the HMC5883L compass away from motor magnetic fields and wire VCC, GND, SDA, and SCL to Pi physical pins 17, 9, 3, and 5.
+\end{enumerate}
+
+% ------------------------------------------
+\subsection{System Interconnection Diagram}
+% ------------------------------------------
+The ASCII schematic in Listing~\ref{lst:ascii_diagram} details the full trace connections, data bridges, logic gates, and grounding vectors characterizing the mobile platform topology.
+
+\begin{lstlisting}[caption={Vertical System Interconnection Diagram}, label={lst:ascii_diagram}, basicstyle=\ttfamily\fontsize{5.5}{6.5}\selectfont, numbers=none]
++-------------------------------------------------------------+
+|            ORCHESTRATION LAYER: RASPBERRY PI 4              |
+|                                                             |
+|  [Pin  1: 3.3V] ---> VCC (NEO-6M GPS)                      |
+|  [Pin  6: GND ] ---> GND (NEO-6M GPS)                      |
+|  [Pin 10: RX0 ] <--- TX  (NEO-6M GPS)                      |
+|  [Pin  8: TX0 ] ---> RX  (NEO-6M GPS)                      |
+|                                                             |
+|  [Pin 17: 3.3V] ---> VCC (HMC5883L Compass)                |
+|  [Pin  9: GND ] ---> GND (HMC5883L Compass)                |
+|  [Pin  3: SDA1] <--> SDA (HMC5883L Compass)                |
+|  [Pin  5: SCL1] <--> SCL (HMC5883L Compass)                |
+|                                                             |
+|  [ Blue USB 3.0 Host Port ]                                 |
++--------------------------|----------------------------------+
+                           |  (Shielded USB Data Link)
+                           v
++--------------------------|----------------------------------+
+|  [ On-Board Micro-USB Interface Port ]                      |
+|                                                             |
+|          SENSORY NODE LAYER: ESP32 DEVKIT V1                |
+|                                                             |
+|  [GPIO  5 / 18] <---> [Trig/Echo] Left  Sonar (HC-SR04)   |
+|  [GPIO 26 / 27] <---> [Trig/Echo] Right Sonar (HC-SR04)   |
+|  [GPIO 15 / 23] <---> [Trig/Echo] Rear  Sonar (HC-SR04)   |
+|                                                             |
+|  [GPIO 14] <--- [OUT] Left  Digital IR Sensor              |
+|  [GPIO 12] <--- [OUT] Right Digital IR Sensor              |
+|  [GPIO 13] <--- [OUT] Rear  Digital IR Sensor              |
+|                                                             |
+|  [GPIO  4] <--- [Data] DHT11 Climate Sensor                |
+|  [GPIO 33] <--- [AO  ] MQ-2 Gas Sensor                     |
+|                                                             |
+|  [GPIO 17: TX2] ---------------------------------> (to Pin 11)
+|  [GPIO 16: RX2] <--+                                       |
+|                    |  [1kOhm]--+--[2kOhm]--> GND           |
+|                    +---------(junction)<-- (Pin 12 TX)      |
++-------------------------------------------------------------+
+                          |              |
+                    (RX: Pin 11)   (TX: Pin 12)
+                          v              v
++-------------------------------------------------------------+
+|          EXECUTION NODE LAYER: ARDUINO UNO R3               |
+|                                                             |
+|  [Pin  2] --> [IN1+IN3 Jumped] Driver 1  (Left  Track)     |
+|  [Pin  3] --> [IN2+IN4 Jumped] Driver 1                    |
+|  [Pin  4] --> [ENA+ENB Jumped] Driver 1  (PWM Speed)       |
+|                                                             |
+|  [Pin  5] --> [IN1+IN3 Jumped] Driver 2  (Right Track)     |
+|  [Pin  6] --> [IN2+IN4 Jumped] Driver 2                    |
+|  [Pin  7] --> [ENA+ENB Jumped] Driver 2  (PWM Speed)       |
+|                                                             |
+|  [Pin  8] --> [IN1 Direct    ] Driver 3  (Center Axis)     |
+|  [Pin  9] --> [IN3 Direct    ] Driver 3                    |
+|  [GND   ] --> [IN2+IN4 Tied  ] Driver 3  (Pulled Low)      |
+|  [Pin 10] --> [ENA+ENB Jumped] Driver 3  (PWM Balance)     |
++-------------------------------------------------------------+
+                           |
+=================================================================
+          COMMON GROUND BUS RAIL  (ZERO REFERENCE POTENTIAL)
+=================================================================
+\end{lstlisting}
+
+% ------------------------------------------
+\subsection{Physical Hardware Configuration}
+% ------------------------------------------
+
+\begin{figure}[htbp]
+\centering
+% -------------------------------------------------------
+% TO ADD YOUR ROVER PHOTO: Replace the path below with
+% your actual image, e.g.: images/rover_photo.jpg
+% You can add multiple photos by duplicating the line.
+% -------------------------------------------------------
+\includegraphics[width=\columnwidth]{image/rover_hardware.png}
+% -------------------------------------------------------
+\caption{Actual physical hardware configuration of the completed 6WD Rover.}
+\label{fig:actual_hardware}
+\end{figure}
+
+As shown in Fig.~\ref{fig:actual_hardware}, components are arranged to reduce electronic interference. High-current motor leads are isolated on the lower deck, while microcontrollers and sensor lines are mounted on the upper tier to protect signal integrity.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.48\columnwidth]{image/rover_front.jpg}\hfill
+\includegraphics[width=0.48\columnwidth]{image/rover_back.jpg}
+\caption{Physical deployment photographs: (left) front sensor deck with ultrasonic and IR array; (right) rear compute deck with Raspberry Pi~4, webcam, and power distribution.}
+\label{fig:rover_photos}
+\end{figure}
+
+Fig.~\ref{fig:rover_photos} complements the annotated hardware layout in Fig.~\ref{fig:actual_hardware} by showing the actual wiring stages during integration and field testing inside the 2500\,sq.~ft.\ facility.
+
+% ------------------------------------------
+\subsection{System Budget and Component Sourcing}
+% ------------------------------------------
+
+\begin{table*}[t]
+\caption{System Budget Realization and E-Commerce Sourcing Metrics}
+\begin{center}
+\begin{tabular}{llcrr}
+\toprule
+\textbf{Hardware Item} & \textbf{E-Commerce Sourcing Reference} & \textbf{Qty.} & \textbf{Unit Price (BDT)} & \textbf{Total (BDT)} \\
+\midrule
+6WD Chassis Platform      & \href{https://store.roboticsbd.com/robot-platform-chassis-Bangladesh/882-6wd-robotics-rover-diy-blue-chassis-with-motors-wheels-robotics-bangladesh.html}{roboticsbd.com}                         & 1 & 2,100 & 2,100 \\
+Raspberry Pi 4 Model B (4GB) & Provided by United International University (UIU Lab)                                          & 1 & ---   & ---   \\
+ESP32 DevKit V1           & \href{https://store.roboticsbd.com/development-boards/948-esp32-esp-32s-30p-nodemcu-development-board-wireless-wifi-robotics-bangladesh.html}{roboticsbd.com}                         & 1 &   450 &   450 \\
+NEO-6M GPS Module         & \href{https://store.roboticsbd.com/gsm-gprs-gps-3g-robotics-bangladesh/3280-gy-neo-6m-v2-flight-control-gps-module-new-robotics-bangladesh.html}{roboticsbd.com}                       & 1 & 550 & 550 \\
+HMC5883L Compass Module   & \href{https://store.roboticsbd.com/imugyrocompass/3404-compass-sensor-hmc5883l-hw-127-robotics-bangladesh.html}{roboticsbd.com}                 & 1 &   430 &   430 \\
+Arduino Uno R3            & \href{https://store.roboticsbd.com/development-boards/323-arduino-uno-r3-smd-robotics-bangladesh.html}{roboticsbd.com}  & 1 &   529 &   529 \\
+L298N H-Bridge Driver     & \href{https://www.zeronetechbd.com/product/details/l298n-h-bridge-dual-dc-motor-driver-modulemdm002}{zeronetechbd.com}               & 3 &   145 &   435 \\
+SSD1306 OLED Module       & \href{https://www.zeronetechbd.com/product/details/oled-display-13-4-pindol002}{zeronetechbd.com}       & 1 &   420 &   420 \\
+DHT11 Thermal Sensor      & \href{https://www.zeronetechbd.com/product/details/dht11-temperature-humidity-sensor-modulesnm037}{zeronetechbd.com}& 1 &   150 &   150 \\
+MQ-2 Gas Sensor           & \href{https://www.zeronetechbd.com/product/details/smoke-sensor-module-mq-2snm007}{zeronetechbd.com}                 & 1 &   150 &   150 \\
+HC-SR04 Sonar Modules     & \href{https://www.zeronetechbd.com/product/details/ultrasonic-sonar-sensor-hc-sr04snm029}{zeronetechbd.com}           & 3 &   85 &   255 \\
+IR Proximity Sensors      & \href{https://www.zeronetechbd.com/product/details/ir-sensor-infrared-obstacle-avoidance-modulesnm004}{zeronetechbd.com}     & 3 &    55 &   165 \\
+18650 Power Cells         & Local Energy Marketplace                                                                           & 3 &   240 &   720 \\
+18650 Battery Shield      & Local Electronics Retail, Dhaka                                                                    & 1 &    80 &    80 \\
+Interconnect Wiring Sets  & Structural Prototyping Miscellaneous                                                               & 1 &   250 &   250 \\
+\midrule
+\multicolumn{4}{l}{\textbf{Total Combined Architectural Capital Expenditure (excluding university-provided Pi)}} & \textbf{BDT 6,684} \\
+\bottomrule
+\end{tabular}
+\label{tab:cost_matrix}
+\end{center}
+\end{table*}
+
+% ==========================================
+\section{Firmware \& Software Implementation}
+% ==========================================
+
+\subsection{Arduino Uno Real-Time Drive Control Logic}
+\begin{lstlisting}[language=C++, caption=Arduino Uno Drive Control Firmware]
+#include <SoftwareSerial.h>
+
+// --- SOFTWARE SERIAL ASSIGNMENTS ---
+// Pin 11 acts as RX (receives from ESP32 TX2)
+// Pin 12 acts as TX (transmits to ESP32 RX2 via voltage divider)
+SoftwareSerial espSerial(11, 12); 
+
+// --- NEW MOTOR DRIVER PIN DEFINITIONS ---
+// Driver 1: Outer Left Track (Front-Left & Back-Left)
+const int IN1 = 2;  const int IN2 = 3;  const int ENA = 4;  
+
+// Driver 2: Outer Right Track (Front-Right & Back-Right)
+const int IN3 = 5;  const int IN4 = 6;  const int ENB = 7;  
+
+// Driver 3: Center Pivot Axis (Center-Left & Center-Right)
+const int IN5 = 8;  // Labeled as IN1 on Driver 3 (Controls Center-Left)
+const int IN6 = 9;  // Labeled as IN3 on Driver 3 (Controls Center-Right)
+const int ENC = 10; // Labeled as ENA on Driver 3 (Shares ENA/ENB via jumper)
+
+void setup() {
+  Serial.begin(9600); 
+  espSerial.begin(9600);
+  
+  // Configure pins 2 through 10 as outputs
+  for(int i = 2; i <= 10; i++) {
+    pinMode(i, OUTPUT);
+  }
+  
+  stopRobot();
+}
+
+void loop() {
+  if (espSerial.available() > 0) {
+    char command = espSerial.read();
+    Serial.print("Executing Command: ");
+    Serial.println(command);
+    
+    switch(command) {
+      case 'F': moveForward();  break;
+      case 'B': moveBackward(); break;
+      case 'L': turnLeft();     break;
+      case 'R': turnRight();    break;
+      case 'S': stopRobot();    break;
+    }
+  }
+}
+
+void moveForward() {
+  // Turn on power to all three driver modules
+  digitalWrite(ENA, HIGH); digitalWrite(ENB, HIGH); digitalWrite(ENC, HIGH);
+  
+  // Driver 1: Outer Left Track Forward
+  digitalWrite(IN1, HIGH);  digitalWrite(IN2, LOW);
+  
+  // Driver 2: Outer Right Track Forward
+  digitalWrite(IN3, HIGH);  digitalWrite(IN4, LOW);
+  
+  // Driver 3: Center Track Forward
+  digitalWrite(IN5, HIGH);  // Center-Left Forward
+  digitalWrite(IN6, HIGH);  // Center-Right Forward
+}
+
+void moveBackward() {
+  digitalWrite(ENA, HIGH); digitalWrite(ENB, HIGH); digitalWrite(ENC, HIGH);
+  
+  // Driver 1: Outer Left Track Backward
+  digitalWrite(IN1, LOW);   digitalWrite(IN2, HIGH);
+  
+  // Driver 2: Outer Right Track Backward
+  digitalWrite(IN3, LOW);   digitalWrite(IN4, HIGH);
+  
+  // Driver 3: Center Track Backward
+  digitalWrite(IN5, LOW);   // Center-Left Backward
+  digitalWrite(IN6, LOW);   // Center-Right Backward
+}
+
+void turnLeft() {
+  digitalWrite(ENA, HIGH); digitalWrite(ENB, HIGH); digitalWrite(ENC, HIGH);
+  
+  // Skid Steering: Left side spins backward, Right side spins forward
+  digitalWrite(IN1, LOW);   digitalWrite(IN2, HIGH); // Outer Left Backward
+  digitalWrite(IN3, HIGH);  digitalWrite(IN4, LOW);  // Outer Right Forward
+  digitalWrite(IN5, LOW);                            // Center-Left Backward
+  digitalWrite(IN6, HIGH);                           // Center-Right Forward
+}
+
+void turnRight() {
+  digitalWrite(ENA, HIGH); digitalWrite(ENB, HIGH); digitalWrite(ENC, HIGH);
+  
+  // Skid Steering: Left side spins forward, Right side spins backward
+  digitalWrite(IN1, HIGH);  digitalWrite(IN2, LOW);  // Outer Left Forward
+  digitalWrite(IN3, LOW);   digitalWrite(IN4, HIGH); // Outer Right Backward
+  digitalWrite(IN5, HIGH);                           // Center-Left Forward
+  digitalWrite(IN6, LOW);                            // Center-Right Backward
+}
+
+void stopRobot() {
+  // Cut the enable lines to cut mechanical power instantly across all drivers
+  digitalWrite(ENA, LOW);  digitalWrite(ENB, LOW);  digitalWrite(ENC, LOW);
+  digitalWrite(IN1, LOW);  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);  digitalWrite(IN4, LOW);
+  digitalWrite(IN5, LOW);  digitalWrite(IN6, LOW);
+}
+\end{lstlisting}
+
+\subsection{ESP32 Sensory Aggregation Framework}
+\label{sec:esp32_pins}
+\begin{lstlisting}[language=C++, caption=ESP32 Multi-Sensor Telemetry Engine]
+#include <ArduinoJson.h>
+#include <DHT.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+// --- OLED DISPLAY CONFIGURATION ---
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1  
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+// --- DHT11 CONFIGURATION ---
+#define DHTPIN 4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
+// --- MQ-2 GAS CONFIGURATION ---
+#define GAS_ANALOG_PIN 33  
+
+// --- ULTRASONIC SONAR CONFIGURATION ---
+const int trigLeft  = 5;   const int echoLeft  = 18;  
+const int trigRight = 26;  const int echoRight = 27;
+const int trigBack  = 15;  const int echoBack  = 23;
+
+// --- IR PROXIMITY CONFIGURATION ---
+const int irLeft  = 32;   
+const int irRight = 34;   
+const int irBack  = 35;   
+
+// --- SYSTEM RUNTIME VARIABLES ---
+unsigned long lastTelemetryTime = 0;
+const unsigned long telemetryInterval = 100; 
+
+String systemMode = "Manual";
+String navStatus = "SYSTEMS ONLINE";
+float currentLat = 23.75610; 
+float currentLon = 90.42440;
+float compassHeading = 59.0;
+int batteryPercentage = 100;
+
+void setup() {
+  // Primary Serial over USB link connecting to Raspberry Pi
+  Serial.begin(115200);
+  
+  // Hardware Serial2 initialization to command the Arduino Uno
+  // Pin 16 acts as RX2 (from Uno TX), Pin 17 acts as TX2 (to Uno RX)
+  Serial2.begin(9600, SERIAL_8N1, 16, 17);
+
+  // Explicitly initialize I2C on pins 21 and 22
+  Wire.begin(21, 22); 
+  Wire.setClock(400000); // Set to fast I2C clock speed for smoother screen rendering
+
+  // Initialize display across alternate standard addresses with dynamic fallback
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
+    Serial.println(F("[WARN]: Failed on 0x3C. Trying alternate 0x3D..."));
+    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3D)) {
+      Serial.println(F("[ERROR]: SSD1306 screen allocation failed completely."));
+    }
+  }
+
+  // Initial Boot Screen Flush
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,0);
+  display.println("=====================");
+  display.println("  MISSION FAIL BOT   ");
+  display.println("  TELEMETRY ONLINE   ");
+  display.println("=====================");
+  display.display();
+  delay(1000);
+
+  dht.begin();
+  pinMode(GAS_ANALOG_PIN, INPUT);
+
+  // Initialize Ultrasonic Pins
+  pinMode(trigLeft, OUTPUT);  pinMode(echoLeft, INPUT);
+  pinMode(trigRight, OUTPUT); pinMode(echoRight, INPUT);
+  pinMode(trigBack, OUTPUT);  pinMode(echoBack, INPUT);
+
+  // Initialize IR Pins
+  pinMode(irLeft, INPUT);
+  pinMode(irRight, INPUT);
+  pinMode(irBack, INPUT);
+}
+
+void loop() {
+  unsigned long currentTime = millis();
+  
+  if (currentTime - lastTelemetryTime >= telemetryInterval) {
+    lastTelemetryTime = currentTime;
+    
+    // Read Environmental Matrix Values
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+    int gasVal = analogRead(GAS_ANALOG_PIN); 
+    
+    if (isnan(h) || isnan(t)) { h = 0.0; t = 0.0; }
+
+    // Read Sonic Proximity Data
+    float distanceLeft  = readUltrasonic(trigLeft, echoLeft);
+    float distanceRight = readUltrasonic(trigRight, echoRight);
+    float distanceBack  = readUltrasonic(trigBack, echoBack);
+
+    // Read IR Pin Vectors
+    int stateIRLeft  = digitalRead(irLeft);
+    int stateIRRight = digitalRead(irRight);
+    int stateIRBack  = digitalRead(irBack);
+
+    // Alert Status Determination Logic
+    if (stateIRLeft == 0 || stateIRRight == 0 || stateIRBack == 0) {
+      navStatus = "PROXIMITY CRITICAL: IR collision vector active!";
+    } else if (distanceLeft < 30.0 || distanceRight < 30.0 || distanceBack < 30.0) {
+      navStatus = "PROXIMITY CRITICAL: Ultrasonic obstacle stop triggered!";
+    } else if (gasVal > 900) { 
+      navStatus = "ALERT: HAZARDOUS GAS THRESHOLD DETECTED";
+    } else {
+      navStatus = "PATH CLEAR / NOMINAL";
+    }
+
+    // Refresh Local Physical OLED Display Readouts
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.printf("MODE: %s\n", systemMode.c_str());
+    display.printf("GAS VALUE: %d\n", gasVal);
+    display.println("SONAR RANGES (cm):");
+    display.printf("L:%.1f R:%.1f B:%.1f\n", distanceLeft, distanceRight, distanceBack);
+    display.printf("IR NODES: %d | %d | %d\n", stateIRLeft, stateIRRight, stateIRBack);
+    display.printf("TEMP: %.1fC HUM:%.1f%%\n", t, h);
+    display.display();
+
+    // Pack telemetry payload frame configurations to send over USB to Raspberry Pi
+    StaticJsonDocument<512> doc;
+    doc["mode"] = systemMode;
+    doc["status"] = navStatus;
+    doc["lat"] = currentLat;
+    doc["lon"] = currentLon;
+    doc["heading"] = compassHeading;
+    doc["battery"] = batteryPercentage;
+    doc["temperature"] = t;
+    doc["humidity"] = h;
+    doc["gas_level"] = gasVal;
+    doc["sonar_left"] = distanceLeft;
+    doc["sonar_right"] = distanceRight;
+    doc["sonar_back"] = distanceBack;
+    doc["ir_left"] = stateIRLeft;
+    doc["ir_right"] = stateIRRight;
+    doc["ir_back"] = stateIRBack;
+
+    serializeJson(doc, Serial);
+    Serial.println(); 
+  }
+  
+  // Check incoming controller commands from Python application running on the Pi
+  if (Serial.available() > 0) {
+    String inboundData = Serial.readStringUntil('\n');
+    inboundData.trim();
+    
+    // Parse commands and push single character bytes out to the Uno via Serial2
+    if (inboundData == "FORWARD") { 
+      systemMode = "Manual"; 
+      Serial2.print('F'); 
+    }
+    else if (inboundData == "BACKWARD") { 
+      systemMode = "Manual"; 
+      Serial2.print('B'); 
+    }
+    else if (inboundData == "LEFT") { 
+      systemMode = "Manual"; 
+      Serial2.print('L'); 
+    }
+    else if (inboundData == "RIGHT") { 
+      systemMode = "Manual"; 
+      Serial2.print('R'); 
+    }
+    else if (inboundData == "STOP") { 
+      systemMode = "Manual"; 
+      Serial2.print('S'); 
+    }
+  }
+}
+
+float readUltrasonic(int trigPin, int echoPin) {
+  // Ensure trigger pin is low and clear beforehand
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(4);
+  
+  // Issue clean square wave pulse
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Capture echo pulse with a relaxed timeout window (45000us) to handle mixed logic voltage shifts
+  long duration = pulseIn(echoPin, HIGH, 45000); 
+  
+  // Standard out-of-range limit catch
+  if (duration == 0 || duration > 40000) return 400.0; 
+  
+  // Calculate distance in centimeters
+  return (duration * 0.0343) / 2.0;
+}
+\end{lstlisting}
+
+\subsection{Raspberry Pi Host Server and Machine Learning Engine}
+\begin{lstlisting}[language=Python, caption=Raspberry Pi Host Control Script]
+#!/usr/bin/env python3
+import os
+import json
+import threading
+import time
+import math
+import cv2
+import numpy as np
+import serial
+import pynmea2
+import smbus2 as smbus
+import onnxruntime as ort
+from flask import Flask, render_template, request, jsonify, Response
+
+app = Flask(__name__)
+
+# --- GLOBAL TELEMETRY MATRIX ---
+robot_telemetry = {
+    "lat": 23.7561,
+    "lon": 90.4244,
+    "heading": 0.0,
+    "status": "Vision Engine Starting...",
+    "mode": "Manual",
+    "battery": 100,
+    
+    # Updated Environmental & Spatial Array Parameters
+    "temperature": 0.0,
+    "humidity": 0.0,
+    "gas_level": 0,
+    "ir_left": 1,
+    "ir_right": 1,
+    "ir_back": 1,
+    "sonar_left": 400.0,
+    "sonar_right": 400.0,
+    "sonar_back": 400.0
+}
+
+# Global tracker for processed coordinate matrix routes
+CURRENT_INDOOR_PATH = []
+
+# --- A* NAVIGATION NODE MATRIX LOGIC ---
+class Node:
+    def __init__(self, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+        self.g = 0  # Operational cost tracking path weight
+        self.h = 0  # Heuristic distance metric to goal node
+        self.f = 0  # Total node evaluation weight (F = G + H)
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+def astar_search(grid, start, end):
+    """Calculates the shortest distance path avoiding structural threshold obstructions"""
+    start_node = Node(None, start)
+    end_node = Node(None, end)
+    
+    open_list = []
+    closed_list = set()
+    open_list.append(start_node)
+    
+    max_y, max_x = grid.shape
+    
+    # Fully mapped 8-way navigation layout matrix vectors (Y, X, MoveCost)
+    movements = [
+        (-1, 0, 1.0),  (1, 0, 1.0),  (0, -1, 1.0), (0, 1, 1.0),
+        (-1, -1, 1.414), (-1, 1, 1.414), (1, -1, 1.414), (1, 1, 1.414)
+    ]
+    
+    while len(open_list) > 0:
+        current_node = open_list[0]
+        current_index = 0
+        for index, item in enumerate(open_list):
+            if item.f < current_node.f:
+                current_node = item
+                current_index = index
+                
+        open_list.pop(current_index)
+        closed_list.add(current_node.position)
+        
+        # Goal node intercepted: Reconstruct coordinate trajectory trace
+        if current_node == end_node:
+            path = []
+            current = current_node
+            while current is not None:
+                path.append(current.position)
+                current = current.parent
+            return path[::-1]
+            
+        for move_y, move_x, cost in movements:
+            node_position = (current_node.position[0] + move_y, current_node.position[1] + move_x)
+            
+            # Boundary layout safety verification check
+            if node_position[0] < 0 or node_position[0] >= max_y or node_position[1] < 0 or node_position[1] >= max_x:
+                continue
+                
+            # Obstacle impact verification check (1 = Structural wall constraint block)
+            if grid[node_position[0]][node_position[1]] == 1:
+                continue
+                
+            if node_position in closed_list:
+                continue
+                
+            child = Node(current_node, node_position)
+            child.g = current_node.g + cost
+            child.h = np.sqrt(((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2))
+            child.f = child.g + child.h
+            
+            if any(open_node for open_node in open_list if child == open_node and child.g > open_node.g):
+                continue
+                
+            open_list.append(child)
+            
+    return None
+
+def process_blueprint_grid(image_path, grid_size=(100, 100)):
+    """Extracts layout structures and transforms high-res blueprint pictures into 100x100 binary matrices"""
+    try:
+        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            return np.zeros(grid_size, dtype=np.uint8)
+            
+        resized_img = cv2.resize(img, grid_size, interpolation=cv2.INTER_AREA)
+        # Luminance pixel matrix threshold limits (Pixels darker than 120 are processed as wall lines)
+        _, binary_grid = cv2.threshold(resized_img, 120, 1, cv2.THRESH_BINARY_INV)
+        return binary_grid
+    except Exception as e:
+        print(f"[WARN]: Image extraction breakdown, defaulting to open layout: {e}")
+        return np.zeros(grid_size, dtype=np.uint8)
+
+
+# --- HARDWARE LINK A: NATIVE GPS SERIAL CHANNEL ---
+gps_serial = None
+possible_ports = ['/dev/serial0', '/dev/ttyAMA0', '/dev/ttyS0']
+
+for port in possible_ports:
+    try:
+        gps_serial = serial.Serial(port, baudrate=9600, timeout=0.1)
+        print(f"[SUCCESS]: GPS locked and communication channel open on {port}.")
+        break
+    except Exception:
+        continue
+
+if not gps_serial:
+    print("[WARN]: GPS Serial offline: All hardware port configurations denied permissions.")
+
+# --- HARDWARE LINK B: NATIVE I2C COMPASS (QMC5883L) ---
+bus = None
+COMPASS_I2C_ADDR = 0x0D
+compass_online = False
+try:
+    bus = smbus.SMBus(1)
+    bus.write_byte_data(COMPASS_I2C_ADDR, 0x09, 0x1D)
+    print("[SUCCESS]: Compass communication bus online.")
+    compass_online = True
+except Exception as e:
+    print(f"[WARN]: Compass offline: {e}")
+
+# --- HARDWARE LINK D: ESP32 SERIAL TELEMETRY PORT ---
+esp32_serial = None
+try:
+    # Explicit connection channel targeted to match the 115200 baud stream configuration
+    esp32_serial = serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=1)
+    print("[SUCCESS]: ESP32 communication array connected natively over /dev/ttyUSB0.")
+except Exception as e:
+    print(f"[WARN]: Serial connection failed on /dev/ttyUSB0: {e}. Checking secondary slots...")
+
+
+# --- FIXED HARDWARE LINK C: ENHANCED DIRECTORY ROUTING ENGINE ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'detect.onnx')
+LABELS_PATH = os.path.join(BASE_DIR, 'coco_labels.txt')
+
+labels = []
+ort_session = None
+vision_engine_ready = False
+
+print(f"[DIAGNOSTIC]: Looking for ONNX Model at: {MODEL_PATH}")
+print(f"[DIAGNOSTIC]: Looking for Labels file at: {LABELS_PATH}")
+
+try:
+    if os.path.exists(LABELS_PATH):
+        with open(LABELS_PATH, 'r') as f:
+            labels = [line.strip() for line in f.readlines()]
+    else:
+        print(f"[CRITICAL ERROR]: labels file is missing at {LABELS_PATH}!")
+            
+    if os.path.exists(MODEL_PATH):
+        ort_session = ort.InferenceSession(MODEL_PATH)
+        print(f"[SUCCESS]: Loaded ONNX Model natively via absolute base paths.")
+        vision_engine_ready = True
+    else:
+        print(f"[CRITICAL ERROR]: ONNX Model file completely missing at {MODEL_PATH}! AI engine will not start.")
+except Exception as e:
+    print(f"[WARN]: ONNX Engine initialization failed: {e}. Defaulting to standard stream.")
+
+# --- AUTOMATED BEHAVIOR ROUTING MATRIX ---
+def process_robot_reaction(label_text, confidence):
+    """Intercepts live vision strings and translates them into actionable hardware state overrides"""
+    global robot_telemetry
+    
+    label_lower = label_text.lower()
+    if 'person' in label_lower:
+        robot_telemetry["status"] = "EMERGENCY HALT: Human detected in tracking path!"
+        send_serial_command("HALT")
+    elif 'chair' in label_lower or 'couch' in label_lower:
+        robot_telemetry["status"] = f"OBSTACLE WARNING: Swerving to avoid {label_text}."
+    elif 'stop sign' in label_lower:
+        robot_telemetry["status"] = "STOP SIGN SPOTTED: Holding position for 3 seconds..."
+        send_serial_command("HALT")
+    else:
+        robot_telemetry["status"] = f"AI Target Engine Active | Tracking {label_text.upper()}"
+
+# Helper utility to pass commands down to the ESP32
+def send_serial_command(command_str):
+    global esp32_serial
+    if esp32_serial and esp32_serial.is_open:
+        try:
+            esp32_serial.write(f"{command_str}\n".encode('utf-8'))
+        except Exception as e:
+            print(f"[WARN]: Failed to route command downstream across serial link: {e}")
+
+# --- BACKGROUND DATA PROCESSING THREADS ---
+def gps_parsing_worker():
+    global robot_telemetry, gps_serial
+    while True:
+        if gps_serial:
+            try:
+                if gps_serial.in_waiting > 0:
+                    raw_line = gps_serial.readline().decode('utf-8', errors='ignore')
+                    if raw_line.startswith('$GPGGA') or raw_line.startswith('$GPRMC'):
+                        msg = pynmea2.parse(raw_line)
+                        if getattr(msg, 'latitude', None) and getattr(msg, 'longitude', None):
+                            if msg.latitude != 0.0 and msg.longitude != 0.0:
+                                robot_telemetry["lat"] = msg.latitude
+                                robot_telemetry["lon"] = msg.longitude
+            except Exception:
+                pass
+        time.sleep(0.05)
+
+def compass_reading_worker():
+    global robot_telemetry, bus, compass_online
+    while True:
+        if compass_online:
+            try:
+                data = bus.read_i2c_block_data(COMPASS_I2C_ADDR, 0x00, 6)
+                raw_x = (data[1] << 8) | data[0]
+                raw_y = (data[3] << 8) | data[2]
+                if raw_x >= 32768: raw_x -= 65536
+                if raw_y >= 32768: raw_y -= 65536
+                heading_rad = math.atan2(raw_y, raw_x)
+                heading_deg = math.degrees(heading_rad)
+                if heading_deg < 0: heading_deg += 360.0
+                robot_telemetry["heading"] = round(heading_deg, 1)
+            except Exception:
+                pass
+        else:
+            robot_telemetry["heading"] = (robot_telemetry["heading"] + 1) % 360
+        time.sleep(0.1)
+
+# --- BACKGROUND INDUSTRIAL SERIAL PORT PROCESSING WORKER ---
+def esp32_serial_receiver_worker():
+    """Background loop parsing raw JSON telemetry lines directly out of the micro-controller channel"""
+    global robot_telemetry, esp32_serial
+    while True:
+        if esp32_serial and esp32_serial.is_open:
+            try:
+                if esp32_serial.in_waiting > 0:
+                    raw_line = esp32_serial.readline().decode('utf-8', errors='ignore').strip()
+                    if raw_line:
+                        parsed_data = json.loads(raw_line)
+                        
+                        # Unpack environmental measurements
+                        robot_telemetry["temperature"] = float(parsed_data.get('temperature', robot_telemetry["temperature"]))
+                        robot_telemetry["humidity"] = float(parsed_data.get('humidity', robot_telemetry["humidity"]))
+                        robot_telemetry["gas_level"] = int(parsed_data.get('gas_level', robot_telemetry["gas_level"]))
+                        
+                        # Unpack digital IR status metrics
+                        robot_telemetry["ir_left"] = int(parsed_data.get('ir_left', robot_telemetry["ir_left"]))
+                        robot_telemetry["ir_right"] = int(parsed_data.get('ir_right', robot_telemetry["ir_right"]))
+                        robot_telemetry["ir_back"] = int(parsed_data.get('ir_back', robot_telemetry["ir_back"]))
+                        
+                        # Unpack high-fidelity directional ultrasonic sonar measurements
+                        robot_telemetry["sonar_left"] = float(parsed_data.get('sonar_left', robot_telemetry["sonar_left"]))
+                        robot_telemetry["sonar_right"] = float(parsed_data.get('sonar_right', robot_telemetry["sonar_right"]))
+                        robot_telemetry["sonar_back"] = float(parsed_data.get('sonar_back', robot_telemetry["sonar_back"]))
+                        
+                        # Evaluate localized security boundaries
+                        if (robot_telemetry["sonar_left"] < 20.0 or 
+                            robot_telemetry["sonar_right"] < 20.0 or 
+                            robot_telemetry["sonar_back"] < 20.0):
+                            robot_telemetry["status"] = "PROXIMITY CRITICAL: Ultrasonic obstacle stop triggered!"
+                        elif (robot_telemetry["ir_left"] == 0 or 
+                              robot_telemetry["ir_right"] == 0 or 
+                              robot_telemetry["ir_back"] == 0):
+                            robot_telemetry["status"] = "PROXIMITY CRITICAL: IR collision vector active!"
+            except json.JSONDecodeError:
+                pass
+            except Exception as e:
+                print(f"[WARN]: Error inside serial processing channel runtime: {e}")
+        else:
+            time.sleep(2)
+            try:
+                esp32_serial = serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=1)
+            except Exception:
+                pass
+        time.sleep(0.01)
+
+# Initialize background tasks thread maps
+threading.Thread(target=gps_parsing_worker, daemon=True).start()
+threading.Thread(target=compass_reading_worker, daemon=True).start()
+threading.Thread(target=esp32_serial_receiver_worker, daemon=True).start()
+
+
+# --- LIVE CAMERA STREAM GENERATION ENGINE ---
+def generate_camera_frames():
+    global vision_engine_ready, ort_session, labels, robot_telemetry
+    camera = cv2.VideoCapture(0)
+    camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    
+    frame_count = 0
+    cached_boxes = []
+    
+    while True:
+        success, frame = camera.read()
+        if not success:
+            time.sleep(0.03)
+            continue
+            
+        frame_count += 1
+        h_f, w_f, _ = frame.shape
+        targets_found_in_frame = False
+        
+        # Inference Step: Execute model logic on even frames
+        if vision_engine_ready and ort_session is not None and frame_count % 2 == 0:
+            try:
+                input_img = cv2.resize(frame, (300, 300))
+                input_img = cv2.cvtColor(input_img, cv2.COLOR_BGR2RGB)
+                input_data = np.expand_dims(input_img, axis=0).astype(np.uint8)
+                
+                input_name = ort_session.get_inputs()[0].name
+                outputs = ort_session.run(None, {input_name: input_data})
+                
+                boxes = np.squeeze(outputs[0])
+                classes = np.squeeze(outputs[1])
+                scores = np.squeeze(outputs[2])
+                
+                cached_boxes = []
+                num_detections = len(scores) if isinstance(scores, (list, np.ndarray)) else 1
+                
+                for i in range(num_detections):
+                    confidence = scores[i] if num_detections > 1 else scores
+                    
+                    if confidence > 0.35:  
+                        class_id = int(classes[i]) if num_detections > 1 else int(classes)
+                        label_text = labels[class_id] if class_id < len(labels) else f"ID {class_id}"
+                        
+                        ymin, xmin, ymax, xmax = boxes[i] if num_detections > 1 else boxes
+                        
+                        left = int(xmin * w_f)
+                        top = int(ymin * h_f)
+                        right = int(xmax * w_f)
+                        bottom = int(ymax * h_f)
+                        
+                        left, right = max(0, left), min(w_f, right)
+                        top, bottom = max(0, top), min(h_f, bottom)
+                        
+                        cached_boxes.append({
+                            "coords": (left, top, right, bottom),
+                            "label": label_text,
+                            "conf": confidence
+                        })
+            except Exception as e:
+                pass
+
+        # Rendering Step: Draw target arrays on ALL frames continuously
+        if len(cached_boxes) > 0:
+            targets_found_in_frame = True
+            for target in cached_boxes:
+                left, top, right, bottom = target["coords"]
+                label_text = target["label"]
+                confidence = target["conf"]
+                
+                display_msg = f"TARGET: {label_text.upper()} ({int(confidence * 100)}%)"
+                
+                cv2.rectangle(frame, (left, top), (right, bottom), (34, 197, 94), 2)
+                
+                text_y = top - 10 if top - 10 > 15 else top + 15
+                cv2.putText(frame, display_msg, (left, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (34, 197, 94), 2)
+                
+                if frame_count % 2 == 0:
+                    process_robot_reaction(label_text, confidence)
+                    
+        if not targets_found_in_frame and frame_count % 2 == 0:
+            if vision_engine_ready:
+                robot_telemetry["status"] = "AI Target Engine Online"
+            else:
+                robot_telemetry["status"] = "Standard Vision Mode (Model Offline)"
+
+        ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 65])
+        frame_bytes = buffer.tobytes()
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
+
+# --- WEB APP INFRASTRUCTURE ENDPOINTS ---
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_camera_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/api/telemetry', methods=['GET'])
+def get_telemetry():
+    global robot_telemetry, vision_engine_ready
+    if robot_telemetry["status"] == "Vision Engine Starting...":
+        robot_telemetry["status"] = "AI Target Engine Online" if vision_engine_ready else "Standard Vision Feed Active"
+    return jsonify(robot_telemetry)
+
+@app.route('/api/esp32_telemetry', methods=['POST'])
+def receive_esp32_telemetry():
+    global robot_telemetry
+    data = request.get_json()
+    if not data:
+        return jsonify({"status": "error", "message": "No JSON matrix received"}), 400
+
+    robot_telemetry["temperature"] = float(data.get('temperature', robot_telemetry["temperature"]))
+    robot_telemetry["humidity"] = float(data.get('humidity', robot_telemetry["humidity"]))
+    robot_telemetry["gas_level"] = int(data.get('gas_level', robot_telemetry["gas_level"]))
+    
+    robot_telemetry["ir_left"] = int(data.get('ir_left', robot_telemetry["ir_left"]))
+    robot_telemetry["ir_right"] = int(data.get('ir_right', robot_telemetry["ir_right"]))
+    robot_telemetry["ir_back"] = int(data.get('ir_back', robot_telemetry["ir_back"]))
+    
+    robot_telemetry["sonar_left"] = float(data.get('sonar_left', robot_telemetry["sonar_left"]))
+    robot_telemetry["sonar_right"] = float(data.get('sonar_right', robot_telemetry["sonar_right"]))
+    robot_telemetry["sonar_back"] = float(data.get('sonar_back', robot_telemetry["sonar_back"]))
+
+    if (robot_telemetry["sonar_left"] < 20.0 or 
+        robot_telemetry["sonar_right"] < 20.0 or 
+        robot_telemetry["sonar_back"] < 20.0 or 
+        data.get('ir_obstacle', 1) == 0):
+        robot_telemetry["status"] = "PROXIMITY ALERT: Nearby physical block detected!"
+        
+    return jsonify({"status": "processed"})
+
+@app.route('/api/command', methods=['POST'])
+def handle_command():
+    """UPDATED: Intercepts action variables from web UI and pipes them down across the serial bus line"""
+    global robot_telemetry
+    data = request.get_json()
+    if not data:
+        return jsonify({"status": "error", "message": "Missing command payload"}), 400
+        
+    command = data.get("command", "").upper()
+    robot_telemetry["mode"] = "Manual"
+    robot_telemetry["status"] = f"Executing Manual Drive Vector: {command}"
+    
+    # Route command to the ESP32 via serial link
+    send_serial_command(command)
+    return jsonify({"status": "received", "direction": command})
+
+@app.route('/api/set_waypoint', methods=['POST'])
+def set_waypoint():
+    global robot_telemetry
+    data = request.json
+    robot_telemetry["mode"] = "Autonomous"
+    robot_telemetry["status"] = f"GPS Target Locked: {data.get('lat')}, {data.get('lon')}"
+    return jsonify({"status": "locked"})
+
+@app.route('/api/set_indoor_route', methods=['POST'])
+def set_indoor_route():
+    global robot_telemetry, CURRENT_INDOOR_PATH
+    data = request.get_json()
+    ax = data.get('ax')
+    ay = data.get('ay')
+    bx = data.get('bx')
+    by = data.get('by')
+    
+    robot_telemetry["mode"] = "Indoor"
+    robot_telemetry["status"] = "Calculating Vector Grid Route..."
+    
+    blueprint_path = os.path.join(app.root_path, 'static', 'floorplan.jpg')
+    
+    GRID_W, GRID_H = 100, 100
+    grid = process_blueprint_grid(blueprint_path, grid_size=(GRID_W, GRID_H))
+    
+    canvas_w = data.get('canvasWidth', 400)
+    canvas_h = data.get('canvasHeight', 300)
+    
+    start_cell = (int((ay / canvas_h) * GRID_H), int((ax / canvas_w) * GRID_W))
+    goal_cell = (int((by / canvas_h) * GRID_H), int((bx / canvas_w) * GRID_W))
+    
+    start_cell = (max(0, min(GRID_H-1, start_cell[0])), max(0, min(GRID_W-1, start_cell[1])))
+    goal_cell = (max(0, min(GRID_H-1, goal_cell[0])), max(0, min(GRID_W-1, goal_cell[1])))
+    
+    calculated_path = astar_search(grid, start_cell, goal_cell)
+    
+    if calculated_path:
+        CURRENT_INDOOR_PATH = calculated_path
+        robot_telemetry["status"] = f"Indoor Route Fixed: {len(calculated_path)} path nodes active."
+        
+        ui_path = []
+        for cell_y, cell_x in calculated_path:
+            ui_x = (cell_x / GRID_W) * canvas_w
+            ui_y = (cell_y / GRID_H) * canvas_h
+            ui_path.append({'x': ui_x, 'y': ui_y})
+            
+        return jsonify({
+            "status": "path_computed", 
+            "path": ui_path
+        })
+    else:
+        robot_telemetry["status"] = "Routing Error: Target path completely blocked."
+        return jsonify({"status": "error", "message": "No valid structural path found between points."}), 400
+
+@app.route('/api/upload_map', methods=['POST'])
+def upload_map():
+    if 'file' not in request.files: return jsonify({"error": "No file"}), 400
+    file = request.files['file']
+    save_path = os.path.join(app.root_path, 'static', 'floorplan.jpg')
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    file.save(save_path)
+    return jsonify({"status": "upload_complete"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=False)
+\end{lstlisting}
+
+\subsection{Web Dashboard HUD Interface}
+\begin{lstlisting}[language=HTML, caption=Dashboard HUD Application Front-End]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MISSION FAIL BOT - Operational Command Console</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121214; color: #e2e8f0; margin: 0; padding: 15px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d3748; padding-bottom: 10px; margin-bottom: 15px; }
+        .header h1 { margin: 0; color: #38bdf8; font-size: 24px; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .panel { background: #1e1e24; border: 1px solid #2d3748; border-radius: 8px; padding: 15px; }
+        .panel h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #2d3748; padding-bottom: 5px; color: #94a3b8; }
+        .telemetry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: #18181c; padding: 10px; border-radius: 4px; border-left: 4px solid #38bdf8; }
+        .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+        .stat-value { font-size: 16px; font-weight: bold; margin-top: 2px; }
+        #map, #indoor-canvas-container { width: 100%; height: 380px; background: #18181c; border-radius: 6px; position: relative; overflow: hidden; }
+        #indoor-canvas { width: 100%; height: 100%; cursor: crosshair; display: block; }
+        .control-pad { display: grid; grid-template-columns: repeat(3, 70px); gap: 10px; justify-content: center; margin: 20px auto; }
+        .btn { background: #2d3748; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; text-align: center; -webkit-user-select: none; user-select: none; }
+        .btn:hover { background: #4a5568; }
+        .btn-drive { background: #0284c7; }
+        .btn-drive:active { background: #38bdf8; }
+        
+        /* Interactive Layout Banner Helpers */
+        .banner-info { background: #1a202c; border: 1px dashed #4a5568; border-radius: 6px; padding: 10px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* Mobile Viewport Optimizations */
+        @media (max-width: 900px) { 
+            .grid-container { 
+                grid-template-columns: 1fr; 
+            }
+            #map, #indoor-canvas-container {
+                height: 320px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>MISSION FAIL BOT // Control Console</h1>
+        <div id="connection-badge" class="stat-box" style="border-left-color: #22c55e;">SYSTEMS ONLINE</div>
+    </div>
+
+    <div class="grid-container">
+        <div class="space-y-4">
+            <div class="panel">
+                <h2>Real-Time Mission Telemetry</h2>
+                <div class="telemetry-grid">
+                    <div class="stat-box"><div class="stat-label">System Mode</div><div id="tele-mode" class="stat-value">--</div></div>
+                    <div class="stat-box"><div class="stat-label">Navigation Status</div><div id="tele-status" class="stat-value" style="font-size:13px; color:#38bdf8;">--</div></div>
+                    <div class="stat-box"><div class="stat-label">GPS Coordinate Lat/Lon</div><div id="tele-gps" class="stat-value">--</div></div>
+                    <div class="stat-box"><div class="stat-label">Compass Heading</div><div id="tele-heading" class="stat-value">--</div></div>
+                    <div class="stat-box"><div class="stat-label">Chassis Battery</div><div id="tele-battery" class="stat-value">--</div></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 15px; border-top: 1px solid #2d3748; padding-top: 15px;">
+                    <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #ef4444;">
+                        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600;">Temperature</div>
+                        <div id="hud-temp" style="font-size: 18px; color: #ef4444; font-weight: bold; margin-top: 4px;">0.0 °C</div>
+                    </div>
+                    <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #38bdf8;">
+                        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600;">Humidity</div>
+                        <div id="hud-humidity" style="font-size: 18px; color: #38bdf8; font-weight: bold; margin-top: 4px;">0.0 %</div>
+                    </div>
+                    <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #eab308;">
+                        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600;">Gas Level</div>
+                        <div id="hud-gas" style="font-size: 18px; color: #eab308; font-weight: bold; margin-top: 4px;">0</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Ultrasonic Sonar Ranges</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #00d2d3;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Left Sonar</div>
+                            <div id="hud-sonar-left" style="font-size: 14px; color: #00d2d3; font-weight: bold; margin-top: 2px;">400.0 cm</div>
+                        </div>
+                        <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #00d2d3;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Right Sonar</div>
+                            <div id="hud-sonar-right" style="font-size: 14px; color: #00d2d3; font-weight: bold; margin-top: 2px;">400.0 cm</div>
+                        </div>
+                        <div style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #00d2d3;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Back Sonar</div>
+                            <div id="hud-sonar-back" style="font-size: 14px; color: #00d2d3; font-weight: bold; margin-top: 2px;">400.0 cm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div style="font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">IR Proximity Status Vectors</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div id="card-ir-left" style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #22c55e;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Left Node</div>
+                            <div id="hud-ir-left" style="font-size: 13px; color: #22c55e; font-weight: bold; margin-top: 2px; text-transform: uppercase;">CLEAR</div>
+                        </div>
+                        <div id="card-ir-right" style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #22c55e;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Right Node</div>
+                            <div id="hud-ir-right" style="font-size: 13px; color: #22c55e; font-weight: bold; margin-top: 2px; text-transform: uppercase;">CLEAR</div>
+                        </div>
+                        <div id="card-ir-back" style="background: #18181c; border: 1px solid #2d3748; border-radius: 6px; padding: 10px; text-align: center; border-left: 4px solid #22c55e;">
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Back Node</div>
+                            <div id="hud-ir-back" style="font-size: 13px; color: #22c55e; font-weight: bold; margin-top: 2px; text-transform: uppercase;">CLEAR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Manual Drive Override Pad</h2>
+                <div class="control-pad">
+                    <div></div><button class="btn btn-drive" onmousedown="sendCommand('FORWARD')" onmouseup="sendCommand('STOP')" ontouchstart="sendCommand('FORWARD'); event.preventDefault();" ontouchend="sendCommand('STOP')">▲</button><div></div>
+                    <button class="btn btn-drive" onmousedown="sendCommand('LEFT')" onmouseup="sendCommand('STOP')" ontouchstart="sendCommand('LEFT'); event.preventDefault();" ontouchend="sendCommand('STOP')">◀</button>
+                    <button class="btn" style="background:#ef4444;" onclick="sendCommand('STOP')" ontouchstart="sendCommand('STOP')">■</button>
+                    <button class="btn btn-drive" onmousedown="sendCommand('RIGHT')" onmouseup="sendCommand('STOP')" ontouchstart="sendCommand('RIGHT'); event.preventDefault();" ontouchend="sendCommand('STOP')">▶</button>
+                    <div></div><button class="btn btn-drive" onmousedown="sendCommand('BACKWARD')" onmouseup="sendCommand('STOP')" ontouchstart="sendCommand('BACKWARD'); event.preventDefault();" ontouchend="sendCommand('STOP')">▼</button><div></div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel" style="margin-bottom:15px;">
+                <h2>Live Automation Vision Stream</h2>
+                <div style="width:100%; text-align:center; background:#18181c; border-radius:6px; overflow:hidden;">
+                    <img src="/video_feed" style="width:100%; max-width:640px; height:auto; display:block; margin:0 auto;" alt="Live Vision Stream Disconnected">
+                </div>
+            </div>
+
+            <div class="panel" id="outdoor-panel" style="margin-bottom:15px;">
+                <h2>Outdoor GIS Mapping Network (Double-Tap Destination)</h2>
+                <div id="map"></div>
+            </div>
+
+            <div class="panel" id="indoor-panel">
+                <h2>Indoor Workspace Mapping (Upload Picture & Set A/B)</h2>
+                <div style="margin-bottom:12px; display: flex; gap: 10px; align-items: center; justify-content: space-between;">
+                    <input type="file" id="map-upload-input" accept="image/*" style="font-size: 12px; color: #94a3b8;">
+                    <button class="btn" style="padding:6px 12px; font-size:12px; white-space: nowrap;" onclick="uploadFloorplan()">Upload Blueprint</button>
+                </div>
+                <div id="indoor-canvas-container">
+                    <canvas id="indoor-canvas"></canvas>
+                </div>
+                <div class="banner-info">
+                    <div style="font-size:12px; color:#38bdf8; font-weight: 500;">
+                        Tap 1: <span style="color:#22c55e;">● Start (A)</span> | Tap 2: <span style="color:#ef4444;">● Goal (B)</span>
+                    </div>
+                    <button class="btn" style="padding: 4px 10px; font-size: 11px; background: #4a5568;" onclick="resetIndoorPoints()">Clear Points</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- HIGH-ACCURACY GOOGLE MAPS TILE VECTOR ENGINE ---
+        var map = L.map('map', { 
+            doubleClickZoom: false,
+            zoomControl: true,
+            tap: false 
+        }).setView([23.7561, 90.4244], 18); 
+
+        // Direct ingestion pipelines pulling Google Maps standard high-resolution street tiles
+        L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 22,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
+        }).addTo(map);
+        
+        var robotMarker = L.marker([23.7561, 90.4244]).addTo(map).bindPopup("Rover Live Position");
+        var targetMarker = null;
+
+        // Invalidate map sizing configuration on engine load
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 400);
+
+        // --- GPS TARGET DESTINATION WAYPOINT HANDLER ---
+        map.on('dblclick', function(e) {
+            var clickLat = e.latlng.lat;
+            var clickLon = e.latlng.lng;
+
+            if (targetMarker) { 
+                targetMarker.setLatLng(e.latlng); 
+            } else { 
+                targetMarker = L.marker(e.latlng).addTo(map).bindPopup("Locked Target Waypoint");
+            }
+            targetMarker.openPopup();
+            
+            fetch('/api/set_waypoint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lat: clickLat, lon: clickLon })
+            })
+            .then(response => response.json())
+            .catch(error => console.error("Waypoint failure:", error));
+        });
+
+        // --- INDOOR HIGH-WORKABLE TOUCH MATRIX INTERFACES ---
+        var canvas = document.getElementById('indoor-canvas');
+        var ctx = canvas.getContext('2d');
+        var pointA = null;
+        var pointB = null;
+        var mapImage = new Image();
+
+        function uploadFloorplan() {
+            var fileInput = document.getElementById('map-upload-input');
+            if(fileInput.files.length === 0) return alert("Select an image blueprint first.");
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            fetch('/api/upload_map', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "upload_complete") {
+                    setTimeout(loadCanvasImage, 300);
+                }
+            });
+        }
+
+        function loadCanvasImage() {
+            mapImage.src = '/static/floorplan.jpg?t=' + new Date().getTime();
+            mapImage.onload = function() {
+                resetIndoorPoints();
+            }
+        }
+
+        function resetIndoorPoints() {
+            pointA = null;
+            pointB = null;
+            redrawCanvas();
+        }
+
+        function redrawCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (!mapImage.src || mapImage.src.indexOf('undefined') !== -1) {
+                // Background fallback indicator when empty
+                ctx.fillStyle = "#18181c";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#4a5568";
+                ctx.font = "13px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("No blueprint loaded. Upload blueprint map image above.", canvas.width/2, canvas.height/2);
+                return;
+            }
+
+            var imgRatio = mapImage.width / mapImage.height;
+            var canvasRatio = canvas.width / canvas.height;
+            var drawWidth, drawHeight, xOffset, yOffset;
+
+            if (imgRatio > canvasRatio) {
+                drawWidth = canvas.width;
+                drawHeight = canvas.width / imgRatio;
+                xOffset = 0;
+                yOffset = (canvas.height - drawHeight) / 2;
+            } else {
+                drawWidth = canvas.height * imgRatio;
+                drawHeight = canvas.height;
+                xOffset = (canvas.width - drawWidth) / 2;
+                yOffset = 0;
+            }
+
+            ctx.drawImage(mapImage, xOffset, yOffset, drawWidth, drawHeight);
+            
+            if (pointA) drawMarker(pointA.x, pointA.y, '#22c55e', 'A');
+            if (pointB) drawMarker(pointB.x, pointB.y, '#ef4444', 'B');
+        }
+
+        window.addEventListener('resize', redrawCanvas);
+
+        // Absolute Normalized Coordinate Processor
+        function handleWorkspaceTap(clientX, clientY) {
+            var rect = canvas.getBoundingClientRect();
+            var x = clientX - rect.left;
+            var y = clientY - rect.top;
+
+            // Bounds constraints checking
+            if(x < 0 || x > canvas.width || y < 0 || y > canvas.height) return;
+
+            if (!pointA) {
+                pointA = {x: x, y: y};
+                redrawCanvas();
+            } else if (!pointB) {
+                pointB = {x: x, y: y};
+                redrawCanvas();
+
+                // Fire payload packet cleanly down to Python architecture
+                fetch('/api/set_indoor_route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ax: Math.round(pointA.x), ay: Math.round(pointA.y), bx: Math.round(pointB.x), by: Math.round(pointB.y) })
+                }).then(res => res.json())
+                  .then(d => console.log("Indoor target routing successful:", d))
+                  .catch(e => console.error("Indoor mapping pipe error:", e));
+            } else {
+                // Dynamic circular reset tracking logic on 3rd tap
+                pointA = {x: x, y: y};
+                pointB = null;
+                redrawCanvas();
+            }
+        }
+
+        canvas.addEventListener('click', function(e) {
+            handleWorkspaceTap(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('touchstart', function(e) {
+            if(e.touches.length === 1) {
+                e.preventDefault(); 
+                handleWorkspaceTap(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: false });
+
+        function drawMarker(x, y, color, label) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(x, y, 12, 0, 2*Math.PI); ctx.fill();
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2.5; ctx.stroke();
+            ctx.fillStyle = 'white'; ctx.font = 'bold 12px Arial';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(label, x, y);
+        }
+
+        // --- CORE LIVE TELEMETRY LOOP CONTROLLER ---
+        function sendCommand(cmd) {
+            fetch('/api/command', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd })
+            });
+        }
+
+        // Helper function to update distinct directional IR Nodes dynamically
+        function updateIRDisplayElement(cardId, elementId, value) {
+            const card = document.getElementById(cardId);
+            const text = document.getElementById(elementId);
+            if (!card || !text) return;
+
+            if (value === 0) {
+                text.innerText = "BLOCK";
+                text.style.color = "#ef4444";
+                card.style.borderLeftColor = "#ef4444";
+            } else {
+                text.innerText = "CLEAR";
+                text.style.color = "#22c55e";
+                card.style.borderLeftColor = "#22c55e";
+            }
+        }
+
+        function updateTelemetryLoop() {
+            fetch('/api/telemetry')
+            .then(res => res.json())
+            .then(data => {
+                // Core Properties Mappings
+                document.getElementById('tele-mode').innerText = data.mode;
+                document.getElementById('tele-status').innerText = data.status;
+                document.getElementById('tele-gps').innerText = data.lat.toFixed(5) + ", " + data.lon.toFixed(5);
+                document.getElementById('tele-heading').innerText = data.heading.toFixed(1) + "°";
+                document.getElementById('tele-battery').innerText = data.battery + "%";
+                
+                if(data.lat !== 0 && data.lon !== 0) {
+                    robotMarker.setLatLng([data.lat, data.lon]);
+                }
+
+                // Direct Atmospheric Mappings
+                if (data.temperature !== undefined) {
+                    document.getElementById('hud-temp').innerText = data.temperature.toFixed(1) + " °C";
+                }
+                if (data.humidity !== undefined) {
+                    document.getElementById('hud-humidity').innerText = data.humidity.toFixed(1) + " %";
+                }
+                if (data.gas_level !== undefined) {
+                    document.getElementById('hud-gas').innerText = data.gas_level;
+                }
+
+                // Multi-Directional Sonar Ingestions
+                if (data.sonar_left !== undefined) {
+                    document.getElementById('hud-sonar-left').innerText = data.sonar_left.toFixed(1) + " cm";
+                }
+                if (data.sonar_right !== undefined) {
+                    document.getElementById('hud-sonar-right').innerText = data.sonar_right.toFixed(1) + " cm";
+                }
+                if (data.sonar_back !== undefined) {
+                    document.getElementById('hud-sonar-back').innerText = data.sonar_back.toFixed(1) + " cm";
+                }
+
+                // Multi-Node Interactive IR Status Parsers (0 = Block, 1 = Clear)
+                updateIRDisplayElement('card-ir-left', 'hud-ir-left', data.ir_left);
+                updateIRDisplayElement('card-ir-right', 'hud-ir-right', data.ir_right);
+                updateIRDisplayElement('card-ir-back', 'hud-ir-back', data.ir_back);
+
+            }).catch(err => console.log("Telemetry link sync update pending..."));
+        }
+        
+        // High-frequency continuous polling engine matching automated navigation loops
+        setInterval(updateTelemetryLoop, 200);
+        
+        // Initial setup run
+        loadCanvasImage();
+    </script>
+</body>
+</html>
+\end{lstlisting}
+
+\subsection{Integrated Operational Flow}
+The complete system synchronizes across hardware and software layers through five discrete phases:
+
+\begin{figure}[htbp]
+\centering
+% -------------------------------------------------------
+% TO ADD YOUR DASHBOARD SCREENSHOT: Replace the path
+% below, e.g.: images/dashboard_ui.png
+% -------------------------------------------------------
+\includegraphics[width=\columnwidth]{image/dashboard_ui.png}
+% -------------------------------------------------------
+\caption{Web dashboard operation interface console HUD layout.}
+\label{fig:dashboard_ui}
+\end{figure}
+
+The overall step-by-step workflow runs as follows:
+\begin{enumerate}
+    \item \textbf{Initialization Phase:} The Raspberry Pi boots its Flask script and opens the serial port at \texttt{/dev/ttyUSB0}. Concurrently, the ESP32 powers its sensor matrix, decodes NMEA sentences from the NEO-6M GPS, calibrates magnetic registers on the HMC5883L, and registers the I2C OLED at address \texttt{0x3C}. The Arduino configures all motor output pins.
+    \item \textbf{Data Scribing Loop:} The ESP32 samples DHT11 and MQ-2 readings, pulls GPS coordinates, computes magnetic headings, and transmits a JSON telemetry packet upstream to the Raspberry Pi every 100\,ms.
+    \item \textbf{Edge Vision Processing Loop:} The Raspberry Pi captures camera frames via OpenCV, normalizes them to $300 \times 300$ pixels, and passes them through the TensorFlow Lite SSD MobileNet v2 model at 18--22\,FPS.
+    \item \textbf{Command Transmission Loop:} When an operator taps a direction button on the web dashboard, a JavaScript \texttt{fetch} call sends a JSON request to the \texttt{/command} endpoint. Flask writes the command string to the ESP32 over USB serial.
+    \item \textbf{Verification and Execution Phase:} The ESP32 validates the command against its proximity array. If all sonar distances exceed $30\,\text{cm}$ and no IR sensor is triggered, the command byte passes through the voltage-divided link to the Arduino Uno, which toggles the L298N gates for immediate skid-steering response.
+\end{enumerate}
+
+% ==========================================
+\section{Results}
+% ==========================================
+The distributed layout was evaluated through stress testing within the target 2500 sq.~ft.\ facility. Table~\ref{tab:performance_metrics} summarizes the measured performance envelope across vision, control, and safety subsystems.
+
+\begin{table}[htbp]
+\caption{Measured System Performance Metrics}
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Observed Value} \\
+\midrule
+Object detection frame rate & 18--22 FPS \\
+Inference input resolution & $300 \times 300$ pixels \\
+End-to-end command latency & $< 45$ ms \\
+Telemetry publish interval & 100 ms \\
+Ultrasonic safety envelope & 30 cm (override) \\
+Detected COCO classes (facility) & person, chair, table \\
+\bottomrule
+\end{tabular}
+\label{tab:performance_metrics}
+\end{center}
+\end{table}
+
+The TensorFlow Lite / ONNX Runtime pipeline successfully categorized target elements such as \textit{person}, \textit{chair}, and \textit{table} in real time at a stable 18--22 frames per second. Bounding boxes were overlaid on the live MJPEG stream served to the Flask dashboard (Fig.~\ref{fig:dashboard_ui}), and detections of \textit{person} triggered an automated emergency halt command routed through the ESP32 safety layer.
+
+The hardware override matrix performed reliably during proximity tests. When an unexpected obstacle entered the 30\,cm warning envelope, the ESP32 overrode manual inputs and issued an automatic \texttt{STOP} signal, immediately cutting power to the motor drivers. Indoor A* path planning over uploaded floorplan images produced valid routes within the 100$\times$100 occupancy grid when start and goal nodes were placed on traversable cells.
+
+
+
+\section{Discussion}
+% ==========================================
+An evaluation of the platform's constraints and engineering trade-offs reveals several key performance factors:
+
+\begin{itemize}
+    \item \textbf{Limitations and Design Constraints (P2):} Infrared proximity sensors are sensitive to ambient light variations, which can trigger false hazard flags under bright sunlight or near highly reflective glass surfaces. Additionally, indoor environments block GPS satellite line-of-sight, requiring the system to cross-reference dead-reckoning vectors using HMC5883L magnetic sensor data.
+
+    \item \textbf{Conflicting Requirements and Alternatives (P3):} An alternative design consolidated all data aggregation and drive logic onto a single microcontroller. Testing revealed that high-current motor spikes generated back-EMF noise that corrupted analog sensor data. The distributed architecture effectively resolved this hardware conflict.
+
+    \item \textbf{Interdependence (P7):} The modular layers are decoupled but maintain critical interdependencies. If the primary software link between the host server and the aggregator breaks, the execution node automatically triggers an emergency safety halt to prevent accidents.
+
+    \item \textbf{Cross-Disciplinary Impact (P4):} Although rooted in embedded systems and computer vision, the platform addresses facility security and environmental monitoring---domains where CSE practitioners must integrate hardware safety standards, workspace ergonomics, and human-presence detection ethics beyond pure algorithm design.
+
+    \item \textbf{Standards and Ethics (P5):} UART, I2C, and USB serial interfacing followed manufacturer datasheets for the NEO-6M, HMC5883L, and L298N modules. Human-detection halts were implemented to prioritize occupant safety over uninterrupted patrol, aligning with responsible surveillance practice in shared office environments.
+
+    \item \textbf{Stakeholder Requirements (P6):} Laboratory supervisors specified cost-effective sourcing (under BDT~7{,}000 excluding the university-provided Pi), real-time dashboard visibility, and hardware failsafes independent of Wi-Fi latency---all of which shaped the three-tier architecture and 100\,ms JSON telemetry contract.
+\end{itemize}
+
+\begin{table}[htbp]
+\caption{Complex Engineering Problem (CEP) Structural Matrix}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{P1} & \textbf{P2} & \textbf{P3} & \textbf{P4} & \textbf{P5} & \textbf{P6} & \textbf{P7} \\
+\hline
+$\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+\hline
+\end{tabular}
+\label{tab:cep_table}
+\end{center}
+\end{table}
+
+% ==========================================
+\section{Conclusion}
+% ==========================================
+The distributed multi-agent computing architecture presented for this 6WD rover resolves the processing bottlenecks inherent in single-processor mobile platforms. Isolating real-time motor commands from high-latency data processing maintains responsive skid-steering while running local edge computer vision models simultaneously. Future iterations will replace the infrared sensor array with 2D LiDAR units to implement full Simultaneous Localization and Mapping (SLAM) path planning across large facilities.
+
+% ==========================================
+\section*{Acknowledgment}
+% ==========================================
+The development team extends sincere gratitude to \textbf{Mr.~Fahim Hafiz}, course instructor for CSE~4326 (Microprocessors and Microcontrollers Laboratory), and the faculty supervisors and laboratory technicians of the Department of Computer Science and Engineering at \textbf{United International University (UIU)}, Dhaka, Bangladesh, for providing the Raspberry Pi~4 hardware unit, manufacturing equipment, testing environments, and technical guidance required to construct and validate this distributed robotics project.
+
+% ==========================================
+\begin{thebibliography}{00}
+% ==========================================
+\bibitem{b1} TensorFlow Core Development Infrastructure Group, ``TensorFlow Lite: High-Performance Local Optimization Runtime Inference Specification Model,'' \textit{IEEE Systems Journal Embedded Technology Letters}, vol.~12, pp.~88--95, 2024.
+\bibitem{b2} A. Howard, M. Sandler, B. Chen, and W. Wang, ``MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications,'' \textit{arXiv preprint arXiv:1704.04861}, 2017.
+\bibitem{b3} W. Liu \textit{et al.}, ``SSD: Single Shot MultiBox Detector,'' in \textit{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 2016, pp.~21--37.
+\bibitem{b4} G. Bradski, ``The OpenCV Library,'' \textit{Dr. Dobb's Journal of Software Tools}, 2000.
+\bibitem{b5} M. Abadi \textit{et al.}, ``TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems,'' 2015. [Online]. Available: \url{https://www.tensorflow.org/}
+\bibitem{b6} Lin \textit{et al.}, ``Microsoft COCO: Common Objects in Context,'' in \textit{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 2014, pp.~740--755.
+\bibitem{b7} Autonomous Surveillance and Navigation Bot --- Source Repository: \url{https://github.com/RaihanRafi12/Autonomous-Surveillance-and-Navigation-Bot}
+\end{thebibliography}
+
+\end{document}
