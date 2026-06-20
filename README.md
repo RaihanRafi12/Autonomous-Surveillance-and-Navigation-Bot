@@ -25,7 +25,7 @@
 
 <table>
 <tr>
-<td width="50%"><img src="readme_assets/rover_front.jpg" alt="Front sensor deck"/></td>
+<td width="50%"><img src="readme_assets/Front_View.jpeg" alt="Front sensor deck"/></td>
 <td width="50%"><img src="readme_assets/rover_back.jpg" alt="Rear compute deck"/></td>
 </tr>
 <tr>
