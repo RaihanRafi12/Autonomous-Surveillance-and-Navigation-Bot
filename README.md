@@ -26,8 +26,8 @@
 <table>
 <tr>
 <td width="33.33%"><img src="readme_assets/Front_View.jpeg" alt="Front sensor deck"/></td>
-<td width="33.33%"><img src="readme_assets/Top_View.jpg" alt="Top controller deck"/></td>
-<td width="33.33%"><img src="readme_assets/Rear_View.jpg" alt="Rear compute deck"/></td>
+<td width="33.33%"><img src="readme_assets/Top_View.jpeg" alt="Top controller deck"/></td>
+<td width="33.33%"><img src="readme_assets/Rear_View.jpeg" alt="Rear compute deck"/></td>
 </tr>
 <tr>
 <td align="center"><sub><b>Sensor deck</b> — ultrasonic array, IR modules, wiring harness</sub></td>
@@ -36,7 +36,7 @@
 </tr>
 </table>
 
-> Add `rover_front.jpg` and `rover_back.jpg` to `readme_assets/` for gallery images. Full IEEE paper figures live in `docs/overleaf/image/`.
+> Full IEEE paper figures live in `docs/overleaf/image/`.
 
 ---
 
